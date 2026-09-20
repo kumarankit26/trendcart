@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendCart - Premium Online Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ================= AUTH GATEWAY ================= -->
+    <div id="authPage" class="auth-page-container">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+
+        <div class="auth-wrapper">
+            <div class="auth-offers">
+                <h1 class="logo" style="color:white; font-size: 38px; margin-bottom: 15px;">Trend<span style="color:#ff9f00;">Cart</span></h1>
+                <h2>🔥 Mega Catalog (200+ Products)!</h2>
+                <p>Explore massive collections across Electronics, Fashion, Beauty, Home, Sports & Accessories.</p>
+                <div class="offer-box floating">
+                    <h3>SECURE UPI / COD</h3>
+                    <p>Direct App Redirect Support</p>
+                </div>
+            </div>
+
+            <div class="auth-card glassmorphism">
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                    <button class="auth-tab-btn" onclick="switchAuthTab('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="gatewayLoginForm" class="auth-form active">
+                    <div class="form-group">
+                        <label><i class="fa fa-user"></i> Email or Mobile No.</label>
+                        <input type="text" id="lUser" required placeholder="name@example.com or 9876543210">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-lock"></i> Password</label>
+                        <input type="password" id="lPassword" required placeholder="Enter password">
+                    </div>
+                    <div style="text-align: right; margin-bottom: 12px;">
+                        <a href="#" style="color: var(--primary); font-size: 12px; text-decoration: none;" onclick="switchAuthTab('reset')">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="glow-btn">Login Securely</button>
+                </form>
+
+                <!-- Registration Form -->
+                <form id="gatewayRegisterForm" class="auth-form">
+                    <div class="form-group">
+                        <label><i class="fa fa-user"></i> Full Name</label>
+                        <input type="text" id="rName" required placeholder="Ankit Kumar">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="form-group" style="flex:1;">
+                            <label><i class="fa fa-envelope"></i> Email</label>
+                            <input type="email" id="rEmail" required placeholder="Email">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label><i class="fa fa-phone"></i> Mobile No.</label>
+                            <input type="tel" id="rPhone" required placeholder="10 Digits" maxlength="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-venus-mars"></i> Gender</label>
+                        <select id="rGender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-lock"></i> Create Password</label>
+                        <input type="password" id="rPassword" required placeholder="Strong Password">
+                    </div>
+                    <button type="submit" class="glow-btn register-btn">Create Account</button>
+                </form>
+
+                <!-- Reset Password Form -->
+                <form id="gatewayResetForm" class="auth-form">
+                    <h3 style="margin-bottom: 12px;">Reset Password</h3>
+                    <div class="form-group">
+                        <label><i class="fa fa-user"></i> Registered Email or Mobile</label>
+                        <input type="text" id="resetUser" required placeholder="Enter Email or Phone">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-lock"></i> New Password</label>
+                        <input type="password" id="resetNewPass" required placeholder="Enter new password">
+                    </div>
+                    <button type="submit" class="glow-btn" style="background: #ff9f00;">Reset & Login</button>
+                    <p style="text-align: center; margin-top: 10px; font-size: 12px; cursor: pointer; color: var(--primary);" onclick="switchAuthTab('login')">Back to Login</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN USER STORE ================= -->
+    <div id="mainStore" style="display: none;">
+        <header class="glass-header">
+            <div class="header-container">
+                <a href="#" class="logo">Trend<span>Cart</span></a>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search across 200+ products...">
+                    <button><i class="fa fa-search"></i></button>
+                </div>
+                <div class="header-actions">
+                    <div class="user-badge" id="userNameDisplay"><i class="fa fa-user-circle"></i> User</div>
+                    <button class="cart-btn" id="openCartBtn">
+                        <i class="fa fa-shopping-cart"></i> Cart <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                    <button class="logout-btn" onclick="logout()"><i class="fa fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="category-bar">
+            <div class="category-container" id="categoryButtons"></div>
+        </div>
+
+        <main class="main-container">
+            <div class="product-grid" id="productGrid"></div>
+        </main>
+    </div>
+
+    <!-- ================= ADMIN DASHBOARD ================= -->
+    <div id="adminDashboard" style="display: none;">
+        <div class="admin-sidebar">
+            <h2 class="logo" style="color:white; text-align: center; margin: 20px 0;">Admin<span>Panel</span></h2>
+            <ul class="admin-menu">
+                <li class="active" onclick="switchAdminTab('products')"><i class="fa fa-box"></i> Manage Products</li>
+                <li onclick="switchAdminTab('orders')"><i class="fa fa-shopping-bag"></i> View Orders</li>
+                <li onclick="switchAdminTab('admins')"><i class="fa fa-user-shield"></i> Admins & Users</li>
+                <li onclick="logout()"><i class="fa fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </div>
+        
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Welcome, Super Admin <span id="adminNameDisplay"></span>!</h2>
+                <button class="glow-btn" onclick="openProductModal()" style="width:200px;"><i class="fa fa-plus"></i> Add Product</button>
+            </div>
+
+            <!-- Manage Products -->
+            <div id="adminProductsTab">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- View Orders -->
+            <div id="adminOrdersTab" style="display:none;">
+                <button class="glow-btn" style="background:#10b981; margin-bottom:15px; width:220px;" onclick="downloadOrdersExcel()"><i class="fa fa-download"></i> Export Orders Excel</button>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Phone</th>
+                                <th>Payment</th>
+                                <th>Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Admins & Users -->
+            <div id="adminAdminsTab" style="display:none;">
+                <button class="glow-btn" style="background:#10b981; margin-bottom:15px; width:220px;" onclick="downloadUsersExcel()"><i class="fa fa-download"></i> Export Users Excel</button>
+                <div class="admin-card">
+                    <h3>Add New Admin</h3>
+                    <form id="addAdminForm" style="display:flex; gap:15px; margin-top:15px;">
+                        <input type="email" id="newAdminEmail" required placeholder="Admin Email" style="padding:10px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                        <input type="password" id="newAdminPassword" required placeholder="Password" style="padding:10px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                        <button type="submit" class="glow-btn" style="width:auto;"><i class="fa fa-user-plus"></i> Add Admin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="productDetailModal">
+        <div class="modal-card detail-card" onclick="event.stopPropagation()">
+            <button class="close-btn" style="position:absolute; top:15px; right:20px;" onclick="closeModal('productDetailModal')">&times;</button>
+            <div id="productDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer-overlay" id="cartOverlay">
+        <div class="cart-drawer" id="cartDrawer" onclick="event.stopPropagation()">
+            <div class="cart-header">
+                <h3><i class="fa fa-shopping-bag"></i> Your Cart</h3>
+                <button class="close-btn" onclick="closeCart()">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer">
+                <h3>Total: <span id="totalPrice">₹0</span></h3>
+                <button class="glow-btn" onclick="openCheckout()"><i class="fa fa-credit-card"></i> Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flipkart Style Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-card checkout-card" onclick="event.stopPropagation()">
+            <button class="close-btn" style="position:absolute; top:15px; right:20px;" onclick="closeModal('checkoutModal')">&times;</button>
+            <h2>Checkout Details</h2>
+            <form id="checkoutForm" style="margin-top: 15px;">
+                <h4 style="margin-bottom: 10px; color: #ff9f00;">Delivery Address</h4>
+                <div style="display:flex; gap:10px; margin-bottom: 10px;">
+                    <input type="text" id="chkName" required placeholder="Full Name" style="flex:1; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                    <input type="tel" id="chkPhone" required placeholder="Mobile Number" style="flex:1; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom: 10px;">
+                    <input type="text" id="chkPincode" required placeholder="Pincode" style="flex:1; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="chkCity" required placeholder="City / State" style="flex:1; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                </div>
+                <textarea id="chkAddress" rows="3" required placeholder="House No, Building, Street, Area" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; margin-bottom:15px;"></textarea>
+                
+                <h4 style="margin-bottom: 10px; color: #ff9f00;">Payment Method</h4>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; cursor:pointer;">
+                        <input type="radio" name="payMethod" value="UPI" required checked> Direct UPI Payment (8002716612@upi)
+                    </label>
+                    <label style="display:block; font-weight:bold; cursor:pointer;">
+                        <input type="radio" name="payMethod" value="COD" required> Cash on Delivery (COD)
+                    </label>
+                </div>
+                <button type="submit" class="glow-btn" style="background:var(--success);">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Add/Edit Product Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h2 id="modalTitle">Add Product</h2>
+            <form id="productForm" style="margin-top:10px;">
+                <input type="hidden" id="editProductId">
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;"><label>ID</label><input type="text" id="pId" required placeholder="EL201"></div>
+                    <div class="form-group" style="flex:2;"><label>Name</label><input type="text" id="pName" required></div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;"><label>Category</label><select id="pCategory"><option>Electronics</option><option>Fashion</option><option>Beauty</option><option>Home & Living</option><option>Sports</option><option>Accessories</option></select></div>
+                    <div class="form-group" style="flex:1;"><label>Sub-category</label><input type="text" id="pSubcat" required></div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;"><label>Brand</label><input type="text" id="pBrand" required></div>
+                    <div class="form-group" style="flex:1;"><label>Stock</label><input type="number" id="pStock" required value="25"></div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;"><label>Price (₹)</label><input type="number" id="pPrice" required></div>
+                    <div class="form-group" style="flex:1;"><label>Original Price (₹)</label><input type="number" id="pOrigPrice" required></div>
+                </div>
+                <div class="form-group"><label>Image URL</label><input type="url" id="pImage" required></div>
+                <div class="form-group"><label>Description</label><textarea id="pDesc" rows="2" required></textarea></div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button type="submit" class="glow-btn" style="flex:1;">Save Product</button>
+                    <button type="button" class="glow-btn" style="background:#ef4444; flex:1;" onclick="closeModal('productModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
